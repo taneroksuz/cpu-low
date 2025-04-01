@@ -28,7 +28,6 @@ module testbench ();
 
   integer reg_file;
   integer csr_file;
-  integer pmp_file;
   integer mem_file;
 
   initial begin

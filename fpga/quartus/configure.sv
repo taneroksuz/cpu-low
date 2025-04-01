@@ -14,8 +14,6 @@ package configure;
 
   parameter ram_type = 1;
 
-  parameter pmp_region = 4;
-
   parameter rom_base_addr = 32'h00;
   parameter rom_mask_addr = 32'hFF;
 

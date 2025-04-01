@@ -4,27 +4,6 @@ import wires::*;
 module cpu (
     input logic reset,
     input logic clock,
-    output logic [0 : 0] rvfi_valid,
-    output logic [63 : 0] rvfi_order,
-    output logic [31 : 0] rvfi_insn,
-    output logic [0 : 0] rvfi_trap,
-    output logic [0 : 0] rvfi_halt,
-    output logic [0 : 0] rvfi_intr,
-    output logic [1 : 0] rvfi_mode,
-    output logic [1 : 0] rvfi_ixl,
-    output logic [4 : 0] rvfi_rs1_addr,
-    output logic [4 : 0] rvfi_rs2_addr,
-    output logic [31 : 0] rvfi_rs1_rdata,
-    output logic [31 : 0] rvfi_rs2_rdata,
-    output logic [4 : 0] rvfi_rd_addr,
-    output logic [31 : 0] rvfi_rd_wdata,
-    output logic [31 : 0] rvfi_pc_rdata,
-    output logic [31 : 0] rvfi_pc_wdata,
-    output logic [31 : 0] rvfi_mem_addr,
-    output logic [3 : 0] rvfi_mem_rmask,
-    output logic [3 : 0] rvfi_mem_wmask,
-    output logic [31 : 0] rvfi_mem_rdata,
-    output logic [31 : 0] rvfi_mem_wdata,
     input mem_out_type imemory_out,
     output mem_in_type imemory_in,
     input mem_out_type dmemory_out,
@@ -36,9 +15,6 @@ module cpu (
     input logic [63 : 0] mtime
 );
   timeunit 1ns; timeprecision 1ps;
-
-  logic pmp_ierror;
-  logic pmp_derror;
 
   agu_in_type agu_in;
   agu_out_type agu_out;
@@ -65,8 +41,6 @@ module cpu (
   forwarding_out_type forwarding_out;
   csr_in_type csr_in;
   csr_out_type csr_out;
-  csr_pmp_in_type csr_pmp_in;
-  csr_pmp_out_type csr_pmp_out;
   register_read_in_type register_rin;
   register_write_in_type register_win;
   register_out_type register_out;
@@ -84,9 +58,6 @@ module cpu (
   mem_out_type imem_out;
   mem_in_type dmem_in;
   mem_out_type dmem_out;
-  mem_out_type ipmp_out;
-  mem_out_type dpmp_out;
-  rvfi_out_type rvfi_out;
 
   logic [1:0] clear;
 
@@ -99,28 +70,6 @@ module cpu (
   assign fetch_in_d.e = execute_out_q;
   assign execute_in_d.f = fetch_out_q;
   assign execute_in_d.e = execute_out_q;
-
-  assign rvfi_valid = rvfi_out.rvfi_valid;
-  assign rvfi_order = rvfi_out.rvfi_order;
-  assign rvfi_insn = rvfi_out.rvfi_insn;
-  assign rvfi_trap = rvfi_out.rvfi_trap;
-  assign rvfi_halt = rvfi_out.rvfi_halt;
-  assign rvfi_intr = rvfi_out.rvfi_intr;
-  assign rvfi_mode = rvfi_out.rvfi_mode;
-  assign rvfi_ixl = rvfi_out.rvfi_ixl;
-  assign rvfi_rs1_addr = rvfi_out.rvfi_rs1_addr;
-  assign rvfi_rs2_addr = rvfi_out.rvfi_rs2_addr;
-  assign rvfi_rs1_rdata = rvfi_out.rvfi_rs1_rdata;
-  assign rvfi_rs2_rdata = rvfi_out.rvfi_rs2_rdata;
-  assign rvfi_rd_addr = rvfi_out.rvfi_rd_addr;
-  assign rvfi_rd_wdata = rvfi_out.rvfi_rd_wdata;
-  assign rvfi_pc_rdata = rvfi_out.rvfi_pc_rdata;
-  assign rvfi_pc_wdata = rvfi_out.rvfi_pc_wdata;
-  assign rvfi_mem_addr = rvfi_out.rvfi_mem_addr;
-  assign rvfi_mem_rmask = rvfi_out.rvfi_mem_rmask;
-  assign rvfi_mem_wmask = rvfi_out.rvfi_mem_wmask;
-  assign rvfi_mem_rdata = rvfi_out.rvfi_mem_rdata;
-  assign rvfi_mem_wdata = rvfi_out.rvfi_mem_wdata;
 
   agu agu_comp (
       .agu_in (agu_in),
@@ -202,19 +151,6 @@ module cpu (
       .mtime(mtime)
   );
 
-  pmp pmp_comp (
-      .reset(reset),
-      .clock(clock),
-      .pmp_ierror(pmp_ierror),
-      .pmp_derror(pmp_derror),
-      .csr_pmp_in(csr_pmp_in),
-      .csr_pmp_out(csr_pmp_out),
-      .imem_in(imem_in),
-      .imem_out(ipmp_out),
-      .dmem_in(dmem_in),
-      .dmem_out(dpmp_out)
-  );
-
   buffer buffer_comp (
       .reset(reset),
       .clock(clock),
@@ -269,10 +205,7 @@ module cpu (
       .forwarding_ein(forwarding_ein),
       .csr_out(csr_out),
       .csr_in(csr_in),
-      .csr_pmp_out(csr_pmp_out),
-      .csr_pmp_in(csr_pmp_in),
       .dmem_out(dmem_out),
-      .rvfi_out(rvfi_out),
       .a(execute_in_a),
       .d(execute_in_d),
       .y(execute_out_y),
@@ -280,30 +213,10 @@ module cpu (
       .clear(clear)
   );
 
-  always_comb begin
-    if (pmp_ierror == 0) begin
-      imemory_in = imem_in;
-    end else begin
-      imemory_in = init_mem_in;
-    end
-    if (ipmp_out.mem_error == 0) begin
-      imem_out = imemory_out;
-    end else begin
-      imem_out = ipmp_out;
-    end
-  end
+  assign imemory_in = imem_in;
+  assign dmemory_in = dmem_in;
 
-  always_comb begin
-    if (pmp_derror == 0) begin
-      dmemory_in = dmem_in;
-    end else begin
-      dmemory_in = init_mem_in;
-    end
-    if (dpmp_out.mem_error == 0) begin
-      dmem_out = dmemory_out;
-    end else begin
-      dmem_out = dpmp_out;
-    end
-  end
+  assign imem_out = imemory_out;
+  assign dmem_out = dmemory_out;
 
 endmodule

@@ -20,10 +20,7 @@ module execute_stage (
     output forwarding_execute_in_type forwarding_ein,
     input csr_out_type csr_out,
     output csr_in_type csr_in,
-    input csr_pmp_out_type csr_pmp_out,
-    output csr_pmp_in_type csr_pmp_in,
     input mem_out_type dmem_out,
-    output rvfi_out_type rvfi_out,
     input execute_in_type a,
     input execute_in_type d,
     output execute_out_type y,
@@ -132,10 +129,7 @@ module execute_stage (
     csr_in.crden = v.instr.op.crden;
     csr_in.craddr = v.instr.caddr;
 
-    csr_pmp_in.crden = v.instr.op.crden;
-    csr_pmp_in.craddr = v.instr.caddr;
-
-    v.instr.crdata = csr_pmp_out.cready == 1 ? csr_pmp_out.crdata : csr_out.crdata;
+    v.instr.crdata = csr_out.crdata;
 
     alu_in.rdata1 = v.instr.rdata1;
     alu_in.rdata2 = v.instr.rdata2;
@@ -235,41 +229,11 @@ module execute_stage (
     csr_in.cwaddr = v.instr.caddr;
     csr_in.cwdata = v.instr.cwdata;
 
-    csr_pmp_in.cwren = v.instr.op.cwren;
-    csr_pmp_in.cwaddr = v.instr.caddr;
-    csr_pmp_in.cwdata = v.instr.cwdata;
-    csr_pmp_in.mode = v.mode;
-
     csr_in.mret = v.instr.op.mret;
     csr_in.exception = v.instr.op.exception;
     csr_in.epc = v.instr.pc;
     csr_in.ecause = v.instr.ecause;
     csr_in.etval = v.instr.etval;
-
-    rvfi_out.rvfi_valid = v.instr.op.valid;
-    rvfi_out.rvfi_order = csr_out.minstret;
-    rvfi_out.rvfi_insn = v.instr.instr;
-    rvfi_out.rvfi_trap = v.instr.op.exception;
-    rvfi_out.rvfi_halt = v.instr.op.exception;
-    rvfi_out.rvfi_intr = csr_out.trap;
-    rvfi_out.rvfi_mode = v.mode;
-    rvfi_out.rvfi_ixl = 1;
-
-    rvfi_out.rvfi_rs1_addr = (v.instr.op.rden1 == 1) ? v.instr.raddr1 : 0;
-    rvfi_out.rvfi_rs2_addr = (v.instr.op.rden2 == 1) ? v.instr.raddr2 : 0;
-    rvfi_out.rvfi_rs1_rdata = (v.instr.op.rden1 == 1) ? v.instr.rdata1 : 0;
-    rvfi_out.rvfi_rs2_rdata = (v.instr.op.rden2 == 1) ? v.instr.rdata2 : 0;
-    rvfi_out.rvfi_rd_addr = (v.instr.op.wren == 1) ? v.instr.waddr : 0;
-    rvfi_out.rvfi_rd_wdata = (v.instr.op.wren == 1) ? v.instr.wdata : 0;
-
-    rvfi_out.rvfi_pc_rdata = v.instr.pc;
-    rvfi_out.rvfi_pc_wdata = (csr_out.trap == 1) ? csr_out.mtvec : v.instr.npc;
-
-    rvfi_out.rvfi_mem_addr = v.instr.address;
-    rvfi_out.rvfi_mem_rmask = (v.instr.op.load == 1) ? v.instr.byteenable : 0;
-    rvfi_out.rvfi_mem_wmask = (v.instr.op.store == 1) ? v.instr.byteenable : 0;
-    rvfi_out.rvfi_mem_rdata = (v.instr.op.load == 1) ? v.instr.ldata : 0;
-    rvfi_out.rvfi_mem_wdata = (v.instr.op.store == 1) ? v.instr.sdata : 0;
 
     rin = v;
 

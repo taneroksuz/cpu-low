@@ -8,7 +8,6 @@ This cpu is 2-stage scalar processor.
 - RV32-IMC
 - Fast and slow option for multiplication unit
 - Slow division unit
-- Physical Memory Protection
 ### Memory
 - Neumann bus architecture
 - Unified Tightly Integrated Memory
