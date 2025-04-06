@@ -1,4 +1,4 @@
-# CPU-SMALL
+# CPU-LOW
 
 This cpu is 2-stage scalar processor.
 
@@ -27,7 +27,7 @@ The installation scripts of necessary tools are located in directory **tools**. 
 
 1. Clone the repository:
 ```console
-git clone --recurse-submodules https://github.com/taneroksuz/cpu-small.git
+git clone --recurse-submodules https://github.com/taneroksuz/cpu-low.git
 ```
 
 2. Install necessary tools for compilation and simulation:
