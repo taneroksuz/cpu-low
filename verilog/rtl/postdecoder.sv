@@ -52,8 +52,6 @@ module postdecoder (
   logic [0 : 0] nonzero_raddr1;
 
   logic [0 : 0] nonzero_imm_c;
-  logic [0 : 0] nonzero_imm_i;
-  logic [0 : 0] nonzero_imm_u;
 
   always_comb begin
 
@@ -103,8 +101,6 @@ module postdecoder (
     nonzero_raddr1 = |raddr1;
 
     nonzero_imm_c = |imm_c;
-    nonzero_imm_i = |imm_i;
-    nonzero_imm_u = |imm_u;
 
     case (opcode)
       opcode_lui: begin

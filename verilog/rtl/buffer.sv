@@ -81,6 +81,7 @@ module buffer_ctrl (
   localparam total = 2 * (buffer_depth - 2);
 
   localparam [depth-1:0] one = 1;
+  localparam [depth:0] two = 2;
 
   typedef struct packed {
     logic [depth : 0] wid;
@@ -170,8 +171,8 @@ module buffer_ctrl (
     end
 
     if (v.wen == 1) begin
-      v.wid   = v.wid + 2;
-      v.count = v.count + 2;
+      v.wid   = v.wid + two;
+      v.count = v.count + two;
     end
 
     v.diff = 0;
@@ -219,7 +220,7 @@ module buffer_ctrl (
 
     buffer_out.pc = v.ready ? v.pc : 0;
     buffer_out.instr = v.ready ? v.instr : 0;
-    buffer_out.miss = v.ready ? v.error : 0;
+    buffer_out.miss = v.ready ? v.error : 1'b0;
     buffer_out.done = v.ready;
     buffer_out.stall = ~v.wen;
 

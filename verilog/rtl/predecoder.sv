@@ -20,8 +20,6 @@ module predecoder (
   logic [2 : 0] funct3;
 
   logic [4 : 0] waddr;
-  logic [4 : 0] raddr1;
-  logic [11 : 0] caddr;
 
   logic [0 : 0] wren;
   logic [0 : 0] rden1;
@@ -39,13 +37,6 @@ module predecoder (
   lsu_op_type lsu_op;
 
   logic [0 : 0] nonzero_waddr;
-  logic [0 : 0] nonzero_raddr1;
-
-  logic [0 : 0] nonzero_imm_i;
-  logic [0 : 0] nonzero_imm_s;
-  logic [0 : 0] nonzero_imm_b;
-  logic [0 : 0] nonzero_imm_j;
-  logic [0 : 0] nonzero_imm_u;
 
   always_comb begin
 
@@ -63,8 +54,6 @@ module predecoder (
     funct3 = instr[14:12];
 
     waddr = instr[11:7];
-    raddr1 = instr[19:15];
-    caddr = instr[31:20];
 
     wren = 0;
     rden1 = 0;
@@ -82,12 +71,6 @@ module predecoder (
     lsu_op = init_lsu_op;
 
     nonzero_waddr = |waddr;
-    nonzero_raddr1 = |raddr1;
-
-    nonzero_imm_i = |imm_i;
-    nonzero_imm_s = |imm_s;
-    nonzero_imm_b = |imm_b;
-    nonzero_imm_j = |imm_j;
 
     case (opcode)
       opcode_auipc: begin

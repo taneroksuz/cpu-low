@@ -18,6 +18,7 @@ module clint #(
   localparam full = clock_rate - 1;
 
   logic [depth-1 : 0] count = 0;
+  logic [depth-1 : 0] one = 1;
 
   localparam clint_msip_start = 32'h0000;
   localparam clint_msip_end = clint_msip_start + 4;
@@ -148,7 +149,7 @@ module clint #(
         count  <= 0;
         enable <= 1;
       end else begin
-        count  <= count + 1;
+        count  <= count + one;
         enable <= 0;
       end
     end
