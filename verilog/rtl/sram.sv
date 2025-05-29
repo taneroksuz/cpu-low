@@ -103,31 +103,18 @@ module sram #(
           v.write = |v.strb;
           v.read = ~v.write;
           v.counter = 0;
-          v.state = {1'b0, v.addr[0]} + 2'b01;
+          v.state = 1;
         end
 
         if (v.counter > full) begin
-          if (v.write == 1) begin
+          if ((v.write | v.read) == 1) begin
             if (v.state == 2) begin
               v.ready = 1;
               v.write = 0;
-              v.state = 0;
-            end
-            if (v.state == 1) begin
-              v.addr[0] = 1'b1;
-              v.state   = 2;
-            end
-          end
-          if (v.read == 1) begin
-            if (v.state == 2) begin
-              v.data[31:16] = sram_dq;
-              v.ready = 1;
               v.read = 0;
               v.state = 0;
             end
             if (v.state == 1) begin
-              v.data[15:0] = sram_dq;
-              v.addr[0] = 1'b1;
               v.state = 2;
             end
           end
@@ -135,23 +122,39 @@ module sram #(
         end
 
         if (v.write == 1) begin
-          v.ce_n = 0;
-          v.we_n = 0;
           if (v.state == 2) begin
+            v.addr[0] = 1'b1;
             v.dq   = v.data[31:16];
+            v.ce_n = ~(|v.strb[3:2]);
+            v.we_n = ~(|v.strb[3:2]);
             v.ub_n = ~v.strb[3];
             v.lb_n = ~v.strb[2];
           end
           if (v.state == 1) begin
+            v.addr[0] = 1'b0;
             v.dq   = v.data[15:0];
+            v.ce_n = ~(|v.strb[1:0]);
+            v.we_n = ~(|v.strb[1:0]);
             v.ub_n = ~v.strb[1];
             v.lb_n = ~v.strb[0];
           end
         end else if (v.read == 1) begin
-          v.ce_n = 0;
-          v.oe_n = 0;
-          v.ub_n = 0;
-          v.lb_n = 0;
+          if (v.state == 2) begin
+            v.addr[0] = 1'b1;
+            v.data[31:16] = sram_dq;
+            v.ce_n = 0;
+            v.oe_n = 0;
+            v.ub_n = 0;
+            v.lb_n = 0;
+          end
+          if (v.state == 1) begin
+            v.addr[0] = 1'b0;
+            v.data[15:0] = sram_dq;
+            v.ce_n = 0;
+            v.oe_n = 0;
+            v.ub_n = 0;
+            v.lb_n = 0;
+          end
         end
 
         rin = v;
