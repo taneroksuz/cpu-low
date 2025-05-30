@@ -16,7 +16,8 @@ module soc (
     output sram_ub_n,
     output sram_lb_n,
     inout [15:0] sram_dq,
-    output [17:0] sram_addr
+    output [17:0] sram_addr,
+    output verify_out_type ver_out
 );
 
   timeunit 1ns; timeprecision 1ps;
@@ -160,6 +161,7 @@ module soc (
   cpu cpu_comp (
       .reset(reset),
       .clock(clock),
+      .ver_out(ver_out),
       .imemory_in(imemory_in),
       .imemory_out(imemory_out),
       .dmemory_in(dmemory_in),

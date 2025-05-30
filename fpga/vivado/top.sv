@@ -1,4 +1,5 @@
 import configure::*;
+import wires::*;
 
 module top
 (
@@ -26,6 +27,8 @@ module top
   logic SRAM_LB_n;
   logic [15 : 0] SRAM_D;
   logic [17 : 0] SRAM_A;
+
+  (* keep = "true" *) verify_out_type VER_OUT;
 
   initial begin
     SCLK = 0;
@@ -69,7 +72,8 @@ module top
       .sram_ub_n(SRAM_UB_n),
       .sram_lb_n(SRAM_LB_n),
       .sram_dq(SRAM_D),
-      .sram_addr(SRAM_A)
+      .sram_addr(SRAM_A),
+      .ver_out(VER_OUT)
   );
 
 endmodule

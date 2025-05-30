@@ -1,4 +1,5 @@
 import configure::*;
+import wires::*;
 
 module testbench ();
 
@@ -19,6 +20,8 @@ module testbench ();
   logic sram_lb_n;
   logic [17:0] sram_addr;
   wire [15:0] sram_dq;
+
+  verify_out_type ver_out;
 
   logic [31 : 0] host[0:0] = '{default: '0};
 
@@ -65,14 +68,11 @@ module testbench ();
       reg_file = $fopen(filename, "w");
       for (int i = 0; i < stoptime; i = i + 1) begin
         @(posedge clock);
-        if (testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.op.wren == 1) begin
+        if (ver_out.wren == 1) begin
           $fwrite(reg_file, "PERIOD = %t\t", $time);
-          $fwrite(reg_file, "PC = %x\t",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.pc);
-          $fwrite(reg_file, "WADDR = %x\t",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.waddr);
-          $fwrite(reg_file, "WDATA = %x\n",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.wdata);
+          $fwrite(reg_file, "PC = %x\t", ver_out.pc);
+          $fwrite(reg_file, "WADDR = %x\t", ver_out.waddr);
+          $fwrite(reg_file, "WDATA = %x\n", ver_out.wdata);
         end
       end
       $fclose(reg_file);
@@ -85,14 +85,11 @@ module testbench ();
       csr_file = $fopen(filename, "w");
       for (int i = 0; i < stoptime; i = i + 1) begin
         @(posedge clock);
-        if (testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.op.cwren == 1) begin
+        if (ver_out.cwren == 1) begin
           $fwrite(csr_file, "PERIOD = %t\t", $time);
-          $fwrite(csr_file, "PC = %x\t",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.pc);
-          $fwrite(csr_file, "WADDR = %x\t",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.caddr);
-          $fwrite(csr_file, "WDATA = %x\n",
-                  testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.cwdata);
+          $fwrite(csr_file, "PC = %x\t", ver_out.pc);
+          $fwrite(csr_file, "WADDR = %x\t", ver_out.caddr);
+          $fwrite(csr_file, "WDATA = %x\n", ver_out.cwdata);
         end
       end
       $fclose(csr_file);
@@ -105,17 +102,13 @@ module testbench ();
       mem_file = $fopen(filename, "w");
       for (int i = 0; i < stoptime; i = i + 1) begin
         @(posedge clock);
-        if (testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.op.store == 1) begin
-          if (|testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.byteenable == 1) begin
+        if ((ver_out.store) == 1) begin
+          if (|ver_out.byteenable == 1) begin
             $fwrite(mem_file, "PERIOD = %t\t", $time);
-            $fwrite(mem_file, "PC = %x\t",
-                    testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.pc);
-            $fwrite(mem_file, "WADDR = %x\t",
-                    testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.address);
-            $fwrite(mem_file, "WSTRB = %b\t",
-                    testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.byteenable);
-            $fwrite(mem_file, "WDATA = %x\n",
-                    testbench.soc_comp.cpu_comp.execute_stage_comp.a.e.instr.sdata);
+            $fwrite(mem_file, "PC = %x\t", ver_out.pc);
+            $fwrite(mem_file, "WADDR = %x\t", ver_out.address);
+            $fwrite(mem_file, "WSTRB = %b\t", ver_out.byteenable);
+            $fwrite(mem_file, "WDATA = %x\n", ver_out.sdata);
           end
         end
       end
@@ -132,10 +125,10 @@ module testbench ();
   end
 
   always_ff @(posedge clock) begin
-    if (testbench.soc_comp.cpu_comp.fetch_stage_comp.dmem_in.mem_valid == 1) begin
-      if (testbench.soc_comp.cpu_comp.fetch_stage_comp.dmem_in.mem_addr[31:2] == host[0][31:2]) begin
-        if (|testbench.soc_comp.cpu_comp.fetch_stage_comp.dmem_in.mem_wstrb == 1) begin
-          $display("%d", testbench.soc_comp.cpu_comp.fetch_stage_comp.dmem_in.mem_wdata);
+    if (ver_out.store == 1) begin
+      if (ver_out.address[31:3] == host[0][31:3]) begin
+        if (|ver_out.byteenable == 1) begin
+          $display("%d", ver_out.wdata[31:0]);
           $finish;
         end
       end
@@ -157,7 +150,8 @@ module testbench ();
       .sram_ub_n(sram_ub_n),
       .sram_lb_n(sram_lb_n),
       .sram_dq(sram_dq),
-      .sram_addr(sram_addr)
+      .sram_addr(sram_addr),
+      .ver_out(ver_out)
   );
 
 endmodule

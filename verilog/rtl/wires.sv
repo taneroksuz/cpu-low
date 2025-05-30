@@ -736,4 +736,18 @@ package wires;
 
   localparam mem_out_type init_mem_out = 0;
 
+  typedef struct packed {
+    logic [0 : 0]  wren;
+    logic [0 : 0]  cwren;
+    logic [0 : 0]  store;
+    logic [4 : 0]  waddr;
+    logic [11 : 0] caddr;
+    logic [3 : 0]  byteenable;
+    logic [31 : 0] address;
+    logic [31 : 0] pc;
+    logic [31 : 0] wdata;
+    logic [31 : 0] sdata;
+    logic [31 : 0] cwdata;
+  } verify_out_type;
+
 endpackage

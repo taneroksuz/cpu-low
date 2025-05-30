@@ -4,6 +4,7 @@ import wires::*;
 module cpu (
     input logic reset,
     input logic clock,
+    output verify_out_type ver_out,
     input mem_out_type imemory_out,
     output mem_in_type imemory_in,
     input mem_out_type dmemory_out,
@@ -61,13 +62,13 @@ module cpu (
 
   logic [1:0] clear;
 
-  assign fetch_in_a.f = fetch_out_y;
-  assign fetch_in_a.e = execute_out_y;
+  assign fetch_in_a.f   = fetch_out_y;
+  assign fetch_in_a.e   = execute_out_y;
   assign execute_in_a.f = fetch_out_y;
   assign execute_in_a.e = execute_out_y;
 
-  assign fetch_in_d.f = fetch_out_q;
-  assign fetch_in_d.e = execute_out_q;
+  assign fetch_in_d.f   = fetch_out_q;
+  assign fetch_in_d.e   = execute_out_q;
   assign execute_in_d.f = fetch_out_q;
   assign execute_in_d.e = execute_out_q;
 
@@ -206,6 +207,7 @@ module cpu (
       .csr_out(csr_out),
       .csr_in(csr_in),
       .dmem_out(dmem_out),
+      .ver_out(ver_out),
       .a(execute_in_a),
       .d(execute_in_d),
       .y(execute_out_y),
@@ -216,7 +218,7 @@ module cpu (
   assign imemory_in = imem_in;
   assign dmemory_in = dmem_in;
 
-  assign imem_out = imemory_out;
-  assign dmem_out = dmemory_out;
+  assign imem_out   = imemory_out;
+  assign dmem_out   = dmemory_out;
 
 endmodule

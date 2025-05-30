@@ -1,4 +1,5 @@
 import configure::*;
+import wires::*;
 
 module top
 (
@@ -25,6 +26,8 @@ module top
   logic MOSI;
   logic MISO;
   logic SS;
+
+  verify_out_type VER_OUT /* synthesis keep */;
 
   initial begin
     SCLK = 0;
@@ -57,7 +60,8 @@ module top
       .sram_ub_n(SRAM_UB_n),
       .sram_lb_n(SRAM_LB_n),
       .sram_dq(SRAM_D),
-      .sram_addr(SRAM_A)
+      .sram_addr(SRAM_A),
+      .ver_out(VER_OUT)
   );
 
 endmodule

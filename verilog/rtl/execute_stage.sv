@@ -21,6 +21,7 @@ module execute_stage (
     input csr_out_type csr_out,
     output csr_in_type csr_in,
     input mem_out_type dmem_out,
+    output verify_out_type ver_out,
     input execute_in_type a,
     input execute_in_type d,
     output execute_out_type y,
@@ -234,6 +235,18 @@ module execute_stage (
     csr_in.epc = v.instr.pc;
     csr_in.ecause = v.instr.ecause;
     csr_in.etval = v.instr.etval;
+
+    ver_out.wren = v.instr.op.wren;
+    ver_out.cwren = v.instr.op.cwren;
+    ver_out.store = v.instr.op.store;
+    ver_out.waddr = v.instr.waddr;
+    ver_out.caddr = v.instr.caddr;
+    ver_out.byteenable = v.instr.byteenable;
+    ver_out.address = v.instr.address;
+    ver_out.pc = v.instr.pc;
+    ver_out.wdata = v.instr.wdata;
+    ver_out.sdata = v.instr.sdata;
+    ver_out.cwdata = v.instr.cwdata;
 
     rin = v;
 
