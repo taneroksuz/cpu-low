@@ -11,7 +11,7 @@ module lsu (
   logic [15:0] data_h;
   logic [31:0] data_w;
 
-  always_comb begin
+  always @(*) begin
 
     data_b = 0;
     data_h = 0;

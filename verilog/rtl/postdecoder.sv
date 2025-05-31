@@ -53,7 +53,7 @@ module postdecoder (
 
   logic [0 : 0] nonzero_imm_c;
 
-  always_comb begin
+  always @(*) begin
 
     instr = postdecoder_in.instr;
     mcounteren = postdecoder_in.mcounteren;

@@ -58,7 +58,7 @@ module soc (
   logic [31 : 0] mem_addr;
   logic [31 : 0] base_addr;
 
-  always_comb begin
+  always @(*) begin
 
     rom_in = init_mem_in;
     sram_in = init_mem_in;
@@ -148,7 +148,7 @@ module soc (
 
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
     if (reset == 0) begin
       error_out <= init_mem_out;
     end else begin

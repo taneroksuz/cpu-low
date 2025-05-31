@@ -38,7 +38,7 @@ module predecoder (
 
   logic [0 : 0] nonzero_waddr;
 
-  always_comb begin
+  always @(*) begin
 
     instr = predecoder_in.instr;
 

@@ -50,24 +50,24 @@ module buffer_reg (
   logic [48:0] rdata0;
   logic [48:0] rdata1;
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
     if (buffer_reg_in.wen0 == 1) begin
       buffer_reg_array0[buffer_reg_in.waddr0] <= buffer_reg_in.wdata0;
     end
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
     if (buffer_reg_in.wen1 == 1) begin
       buffer_reg_array1[buffer_reg_in.waddr1] <= buffer_reg_in.wdata1;
     end
   end
 
-  always_comb begin
+  always @(*) begin
     rdata0 = buffer_reg_array0[buffer_reg_in.raddr0];
     rdata1 = buffer_reg_array1[buffer_reg_in.raddr1];
   end
 
-  always_comb begin
+  always @(*) begin
     buffer_reg_out.rdata0 = buffer_reg_in.raddr0 == buffer_reg_in.waddr0 ? buffer_reg_in.wdata0 : rdata0;
     buffer_reg_out.rdata1 = buffer_reg_in.raddr1 == buffer_reg_in.waddr1 ? buffer_reg_in.wdata1 : rdata1;
   end
@@ -132,7 +132,7 @@ module buffer_ctrl (
 
   reg_type r, rin, v;
 
-  always_comb begin
+  always @(*) begin
 
     v = r;
 
@@ -235,7 +235,7 @@ module buffer_ctrl (
 
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
     if (reset == 0) begin
       r <= init_reg;
     end else begin

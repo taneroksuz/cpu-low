@@ -23,7 +23,7 @@ module csr (
   logic [7:0] cause = 0;
   logic [0:0] mret = 0;
 
-  always_comb begin
+  always @(*) begin
     if (csr_in.crden == 1) begin
       case (csr_in.craddr)
         csr_misa: csr_out.crdata = 32'h40001104;
@@ -118,7 +118,7 @@ module csr (
 
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
 
     if (reset == 0) begin
       csr_machine_reg <= init_csr_machine_reg;

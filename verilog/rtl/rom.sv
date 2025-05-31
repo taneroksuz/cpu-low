@@ -16,7 +16,7 @@ module rom (
 
   assign raddr = rom_in.mem_addr[6:2];
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
 
     case (raddr)
       5'b00000: rdata <= 32'h41014081;
@@ -55,7 +55,7 @@ module rom (
 
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
 
     if (rom_in.mem_valid == 1) begin
       ready <= 1;

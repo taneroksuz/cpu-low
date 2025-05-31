@@ -10,7 +10,7 @@ module forwarding (
   logic [31:0] res1;
   logic [31:0] res2;
 
-  always_comb begin
+  always @(*) begin
     res1 = forwarding_rin.rdata1;
     res2 = forwarding_rin.rdata2;
     if (forwarding_ein.wren == 1 & forwarding_rin.raddr1 == forwarding_ein.waddr) begin

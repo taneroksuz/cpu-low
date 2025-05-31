@@ -49,7 +49,7 @@ module tim_ram (
         end
       end
 
-      always_ff @(posedge clock) begin
+      always @(posedge clock) begin
         if (tim_ram_in.en == 1) begin
           if (tim_ram_in.strb[0]) tim_ram[tim_ram_in.addr][7:0] <= tim_ram_in.data[7:0];
           if (tim_ram_in.strb[1]) tim_ram[tim_ram_in.addr][15:8] <= tim_ram_in.data[15:8];
@@ -71,7 +71,7 @@ module tim_ram (
         end
       end
 
-      always_ff @(posedge clock) begin
+      always @(posedge clock) begin
         if (tim_ram_in.strb[0]) tim_ram[tim_ram_in.addr][0] <= tim_ram_in.data[7:0];
         if (tim_ram_in.strb[1]) tim_ram[tim_ram_in.addr][1] <= tim_ram_in.data[15:8];
         if (tim_ram_in.strb[2]) tim_ram[tim_ram_in.addr][2] <= tim_ram_in.data[23:16];
@@ -111,7 +111,7 @@ module tim_ctrl (
   front_type r, rin;
   front_type v;
 
-  always_comb begin
+  always @(*) begin
 
     v = r;
 
@@ -142,7 +142,7 @@ module tim_ctrl (
 
   end
 
-  always_ff @(posedge clock) begin
+  always @(posedge clock) begin
     if (reset == 0) begin
       r <= init_reg;
     end else begin

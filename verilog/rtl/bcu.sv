@@ -6,7 +6,7 @@ module bcu (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  always_comb begin
+  always @(*) begin
 
     if (bcu_in.bcu_op.bcu_beq == 1) begin
       bcu_out.branch = bcu_in.rdata1 == bcu_in.rdata2;

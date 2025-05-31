@@ -28,7 +28,7 @@ module mul #(
 
     if (mul_performance == 0) begin
 
-      always_comb begin
+      always @(*) begin
 
         v = r;
 
@@ -100,7 +100,7 @@ module mul #(
 
       end
 
-      always_ff @(posedge clock) begin
+      always @(posedge clock) begin
         if (reset == 0) begin
           r <= init_mul_reg;
         end else begin
@@ -111,7 +111,7 @@ module mul #(
 
     end else if (mul_performance == 1) begin
 
-      always_comb begin
+      always @(*) begin
 
         op1 = {1'b0, mul_in.rdata1};
         op2 = {1'b0, mul_in.rdata2};
