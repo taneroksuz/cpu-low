@@ -34,7 +34,6 @@ export MAXTIME ?= 10000000
 export DUMP ?= 0# "1" on, "0" off
 
 compile:
-	benchmark/riscv-tests.sh
 	benchmark/coremark.sh
 	benchmark/whetstone.sh
 	benchmark/free-rtos.sh
