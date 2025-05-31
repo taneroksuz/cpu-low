@@ -18,23 +18,16 @@ module top
 
   timeunit 1ns; timeprecision 1ps;
 
-  logic CLOCK_CPU;
-  logic LOCKED;
-  logic RESET;
+  wire CLOCK_CPU;
+  wire LOCKED;
+  wire RESET;
 
-  logic SCLK;
-  logic MOSI;
-  logic MISO;
-  logic SS;
+  wire SCLK;
+  wire MOSI;
+  wire MISO;
+  wire SS;
 
   verify_out_type VER_OUT /* synthesis keep */;
-
-  initial begin
-    SCLK = 0;
-    MOSI = 0;
-    MISO = 0;
-    SS = 0;
-  end
 
   pll pll_cpu_comp (
     .refclk(CLOCK_50_B5B),

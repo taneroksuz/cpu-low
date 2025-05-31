@@ -3,8 +3,8 @@ import functions::*;
 import wires::*;
 
 module fetch_stage (
-    input logic reset,
-    input logic clock,
+    input wire reset,
+    input wire clock,
     input predecoder_out_type predecoder_out,
     output predecoder_in_type predecoder_in,
     input compress_out_type compress_out,

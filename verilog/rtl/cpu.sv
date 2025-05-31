@@ -2,8 +2,8 @@ import configure::*;
 import wires::*;
 
 module cpu (
-    input logic reset,
-    input logic clock,
+    input wire reset,
+    input wire clock,
     output verify_out_type ver_out,
     input mem_out_type imemory_out,
     output mem_in_type imemory_in,

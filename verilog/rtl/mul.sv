@@ -4,8 +4,8 @@ import wires::*;
 module mul #(
     parameter mul_performance = 1
 ) (
-    input logic reset,
-    input logic clock,
+    input wire reset,
+    input wire clock,
     input mul_in_type mul_in,
     output mul_out_type mul_out
 );
