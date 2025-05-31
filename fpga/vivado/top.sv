@@ -30,6 +30,10 @@ module top
 
   (* keep = "true" *) verify_out_type VER_OUT;
 
+  initial begin
+    MISO = 0;
+  end
+
   pll pll_cpu_comp (
     .clk_in1(CLK100MHZ),
     .reset(~CPU_RESETN),
