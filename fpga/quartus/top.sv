@@ -3,8 +3,8 @@ import wires::*;
 
 module top
 (
-  input           CLOCK_50_B5B,
-  input  [ 3 : 0] KEY,
+  input           CLOCK,
+  input           KEY,
   input           UART_RX,
   output          UART_TX,
   output          SRAM_CE_n,
@@ -30,13 +30,13 @@ module top
   verify_out_type VER_OUT /* synthesis keep */;
 
   pll pll_cpu_comp (
-    .refclk(CLOCK_50_B5B),
-    .rst(~KEY[0]),
+    .refclk(CLOCK),
+    .rst(~KEY),
     .outclk_0(CLOCK_CPU),
     .locked(LOCKED)
   );
 
-  assign RESET = LOCKED & KEY[0];
+  assign RESET = LOCKED & KEY;
 
   soc soc_comp (
       .reset(RESET),
