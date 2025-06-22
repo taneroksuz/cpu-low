@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-RISCV=/opt/rv32imc/
-ARCH=rv32imc_zicsr_zifencei
-ABI=ilp32
-
 if [ -d "$RISCV" ]; then
   sudo rm -rf $RISCV
 fi
