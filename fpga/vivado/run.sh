@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+export QUARTUS_MULTITHREADING=OFF
+
 RED="\033[0;31m"
 GREEN="\033[0;32m"
 BLUE="\033[0;34m"
