@@ -61,13 +61,13 @@ module cpu (
 
   logic [1:0] clear;
 
-  assign fetch_in_a.f = fetch_out_y;
-  assign fetch_in_a.e = execute_out_y;
+  assign fetch_in_a.f   = fetch_out_y;
+  assign fetch_in_a.e   = execute_out_y;
   assign execute_in_a.f = fetch_out_y;
   assign execute_in_a.e = execute_out_y;
 
-  assign fetch_in_d.f = fetch_out_q;
-  assign fetch_in_d.e = execute_out_q;
+  assign fetch_in_d.f   = fetch_out_q;
+  assign fetch_in_d.e   = execute_out_q;
   assign execute_in_d.f = fetch_out_q;
   assign execute_in_d.e = execute_out_q;
 
@@ -216,7 +216,7 @@ module cpu (
   assign imemory_in = imem_in;
   assign dmemory_in = dmem_in;
 
-  assign imem_out = imemory_out;
-  assign dmem_out = dmemory_out;
+  assign imem_out   = imemory_out;
+  assign dmem_out   = dmemory_out;
 
 endmodule

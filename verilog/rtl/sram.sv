@@ -120,15 +120,13 @@ module sram #(
           end
           if (v.read == 1) begin
             if (v.state == 2) begin
-              v.data[31:16] = sram_dq;
               v.ready = 1;
-              v.read = 0;
+              v.read  = 0;
               v.state = 0;
             end
             if (v.state == 1) begin
-              v.data[15:0] = sram_dq;
               v.addr[0] = 1'b1;
-              v.state = 2;
+              v.state   = 2;
             end
           end
           v.counter = 0;
@@ -150,10 +148,20 @@ module sram #(
             v.lb_n = ~v.strb[0];
           end
         end else if (v.read == 1) begin
-          v.ce_n = 0;
-          v.oe_n = 0;
-          v.ub_n = 0;
-          v.lb_n = 0;
+          if (v.state == 2) begin
+            v.data[31:16] = sram_dq;
+            v.ce_n = 0;
+            v.oe_n = 0;
+            v.ub_n = 0;
+            v.lb_n = 0;
+          end
+          if (v.state == 1) begin
+            v.data[15:0] = sram_dq;
+            v.ce_n = 0;
+            v.oe_n = 0;
+            v.ub_n = 0;
+            v.lb_n = 0;
+          end
         end
 
         rin = v;
