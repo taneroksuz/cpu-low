@@ -35,6 +35,8 @@ module arbiter (
 
     if (mem_out.mem_ready == 1) begin
       v.access_type = no_access;
+    end else begin
+      v.mem_in = init_mem_in;
     end
 
     if (dmem_in.mem_valid == 1) begin
