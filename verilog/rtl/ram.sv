@@ -1,7 +1,9 @@
 import configure::*;
 import wires::*;
 
-module ram (
+module ram #(
+    parameter clock_rate
+) (
     input logic reset,
     input logic clock,
     input mem_in_type ram_in,
@@ -9,9 +11,15 @@ module ram (
 );
   timeunit 1ns; timeprecision 1ps;
 
+  localparam full = clock_rate - 1;
+
   localparam depth = $clog2(ram_depth);
 
   logic [31 : 0] ram_block[0:ram_depth-1];
+
+  mem_out_type mem_out = '0;
+
+  logic [31 : 0] counter = 0;
 
   initial begin
     $readmemh("ram.dat", ram_block);
@@ -30,16 +38,23 @@ module ram (
       if (ram_in.mem_wstrb[3] == 1)
         ram_block[ram_in.mem_addr[(depth+1):2]][31:24] <= ram_in.mem_wdata[31:24];
 
-      ram_out.mem_rdata <= ram_block[ram_in.mem_addr[(depth+1):2]];
-      ram_out.mem_error <= 0;
-      ram_out.mem_ready <= 1;
+      mem_out.mem_rdata <= ram_block[ram_in.mem_addr[(depth+1):2]];
+      mem_out.mem_error <= 0;
+      mem_out.mem_ready <= 1;
 
+    end
+
+    if (ram_in.mem_valid == 1) begin
+      counter <= 0;
     end else begin
+      counter <= counter + 1;
+    end
 
-      ram_out.mem_rdata <= 0;
-      ram_out.mem_error <= 0;
-      ram_out.mem_ready <= 0;
-
+    if (counter == 16) begin
+      ram_out <= mem_out;
+      mem_out <= '0;
+    end else begin
+      ram_out <= '0;
     end
 
   end
