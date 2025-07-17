@@ -4,6 +4,7 @@ import wires::*;
 module cpu (
     input logic reset,
     input logic clock,
+    input logic clear,
     input mem_out_type imemory_out,
     output mem_in_type imemory_in,
     input mem_out_type dmemory_out,
@@ -58,8 +59,6 @@ module cpu (
   mem_out_type imem_out;
   mem_in_type dmem_in;
   mem_out_type dmem_out;
-
-  logic [1:0] clear;
 
   assign fetch_in_a.f   = fetch_out_y;
   assign fetch_in_a.e   = execute_out_y;

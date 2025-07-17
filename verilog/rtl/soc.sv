@@ -3,6 +3,7 @@ import wires::*;
 
 module soc (
     input reset,
+    input clear,
     input clock,
     output sclk,
     output mosi,
@@ -153,6 +154,7 @@ module soc (
   cpu cpu_comp (
       .reset(reset),
       .clock(clock),
+      .clear(clear),
       .imemory_in(imemory_in),
       .imemory_out(imemory_out),
       .dmemory_in(dmemory_in),
