@@ -182,18 +182,18 @@ module dram (
 
     if (r_in.state == stSetCmdWr) begin
       if (r_out.app_rdy) begin
-        mem_out.mem_ready <= 1;
+        mem_out.mem_ready = 1;
       end
     end
 
     if (r_in.state == stRecvData) begin
       if (r_out.app_rd_data_valid) begin
-        mem_out.mem_ready <= 1;
+        mem_out.mem_ready = 1;
         unique case (v_in.mem_addr[3:2])
-          0 : mem_out.mem_rdata <= r_out.app_rd_data[31:0];
-          1 : mem_out.mem_rdata <= r_out.app_rd_data[63:32];
-          2 : mem_out.mem_rdata <= r_out.app_rd_data[95:64];
-          3 : mem_out.mem_rdata <= r_out.app_rd_data[127:96];
+          0 : mem_out.mem_rdata = r_out.app_rd_data[31:0];
+          1 : mem_out.mem_rdata = r_out.app_rd_data[63:32];
+          2 : mem_out.mem_rdata = r_out.app_rd_data[95:64];
+          3 : mem_out.mem_rdata = r_out.app_rd_data[127:96];
           default : ;
         endcase
       end
