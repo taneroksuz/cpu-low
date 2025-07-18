@@ -17,9 +17,9 @@ module ram #(
 
   logic [31 : 0] ram_block[0:ram_depth-1];
 
-  mem_out_type mem_out = '0;
+  mem_out_type mem_out;
 
-  logic [31 : 0] counter = 0;
+  logic [31 : 0] counter;
 
   initial begin
     $readmemh("ram.dat", ram_block);
@@ -44,12 +44,6 @@ module ram #(
 
     end
 
-    if (ram_in.mem_valid == 1) begin
-      counter <= 0;
-    end else begin
-      counter <= counter + 1;
-    end
-
     if (counter == 16) begin
       ram_out <= mem_out;
       mem_out <= '0;
@@ -57,6 +51,18 @@ module ram #(
       ram_out <= '0;
     end
 
+  end
+
+  always_ff @(posedge clock) begin
+    if (reset == 0) begin
+      counter <= 0;
+    end else begin
+      if (ram_in.mem_valid == 1) begin
+        counter <= 0;
+      end else begin
+        counter <= counter + 1;
+      end
+    end
   end
 
 endmodule

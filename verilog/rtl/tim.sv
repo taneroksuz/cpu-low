@@ -41,7 +41,7 @@ module tim_ram (
 
     if (ram_type == 0) begin
 
-      logic [31 : 0] tim_ram[0:tim_depth-1] = '{default: '0};
+      logic [31 : 0] tim_ram[0:tim_depth-1];
 
       always_ff @(posedge clock) begin
         if (tim_ram_in.en == 1) begin
@@ -57,7 +57,7 @@ module tim_ram (
 
     if (ram_type == 1) begin
 
-      logic [3 : 0][7 : 0] tim_ram[0:tim_depth-1] = '{default: '0};
+      logic [3 : 0][7 : 0] tim_ram[0:tim_depth-1];
 
       always_ff @(posedge clock) begin
         if (tim_ram_in.strb[0]) tim_ram[tim_ram_in.addr][0] <= tim_ram_in.data[7:0];

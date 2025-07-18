@@ -16,12 +16,12 @@ module csr (
 
   csr_machine_reg_type csr_machine_reg;
 
-  logic [1:0] mode = m_mode;
+  logic [1:0] mode;
 
-  logic [0:0] exception = 0;
-  logic [0:0] interrupt = 0;
-  logic [7:0] cause = 0;
-  logic [0:0] mret = 0;
+  logic [0:0] exception;
+  logic [0:0] interrupt;
+  logic [7:0] cause;
+  logic [0:0] mret;
 
   always_comb begin
     if (csr_in.crden == 1) begin
