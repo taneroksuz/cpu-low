@@ -4,6 +4,7 @@ import wires::*;
 
 module fetch_stage (
     input logic reset,
+    input logic clear,
     input logic clock,
     input predecoder_out_type predecoder_out,
     output predecoder_in_type predecoder_in,
@@ -26,8 +27,7 @@ module fetch_stage (
     input fetch_in_type a,
     input fetch_in_type d,
     output fetch_out_type y,
-    output fetch_out_type q,
-    input logic [1:0] clear
+    output fetch_out_type q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -73,7 +73,7 @@ module fetch_stage (
       end
     endcase
 
-    if (clear[0] == 1) begin
+    if (clear == 1) begin
       v.fence = 0;
       v.spec  = 1;
       v.addr  = 0;
@@ -101,7 +101,7 @@ module fetch_stage (
 
     case (v.state)
       idle: begin
-        if (clear[0] == 0) begin
+        if (clear == 0) begin
           v.state = busy;
           v.valid = 1;
         end
@@ -265,7 +265,7 @@ module fetch_stage (
     v.instr.etval = agu_out.etval;
     v.instr.op.exception = agu_out.exception;
 
-    if ((v.stall | csr_out.trap | csr_out.mret | clear[0]) == 1) begin
+    if ((v.stall | csr_out.trap | csr_out.mret | clear) == 1) begin
       v.instr.op = init_operation;
     end
 

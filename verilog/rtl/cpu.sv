@@ -3,6 +3,7 @@ import wires::*;
 
 module cpu (
     input logic reset,
+    input logic clear,
     input logic clock,
     input mem_out_type imemory_out,
     output mem_in_type imemory_in,
@@ -58,8 +59,6 @@ module cpu (
   mem_out_type imem_out;
   mem_in_type dmem_in;
   mem_out_type dmem_out;
-
-  logic [1:0] clear;
 
   assign fetch_in_a.f   = fetch_out_y;
   assign fetch_in_a.e   = execute_out_y;
@@ -160,6 +159,7 @@ module cpu (
 
   fetch_stage fetch_stage_comp (
       .reset(reset),
+      .clear(clear),
       .clock(clock),
       .predecoder_out(predecoder_out),
       .predecoder_in(predecoder_in),
@@ -182,12 +182,12 @@ module cpu (
       .a(fetch_in_a),
       .d(fetch_in_d),
       .y(fetch_out_y),
-      .q(fetch_out_q),
-      .clear(clear)
+      .q(fetch_out_q)
   );
 
   execute_stage execute_stage_comp (
       .reset(reset),
+      .clear(clear),
       .clock(clock),
       .postdecoder_out(postdecoder_out),
       .postdecoder_in(postdecoder_in),
@@ -209,8 +209,7 @@ module cpu (
       .a(execute_in_a),
       .d(execute_in_d),
       .y(execute_out_y),
-      .q(execute_out_q),
-      .clear(clear)
+      .q(execute_out_q)
   );
 
   assign imemory_in = imem_in;

@@ -3,6 +3,7 @@ import wires::*;
 
 module execute_stage (
     input logic reset,
+    input logic clear,
     input logic clock,
     input postdecoder_out_type postdecoder_out,
     output postdecoder_in_type postdecoder_in,
@@ -24,8 +25,7 @@ module execute_stage (
     input execute_in_type a,
     input execute_in_type d,
     output execute_out_type y,
-    output execute_out_type q,
-    output logic [1:0] clear
+    output execute_out_type q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -61,7 +61,7 @@ module execute_stage (
 
     v.stall = 0;
 
-    v.enable = ~(d.e.stall | csr_out.trap | csr_out.mret | clear[0]);
+    v.enable = ~(d.e.stall | csr_out.trap | csr_out.mret | clear);
 
     v.miss = 0;
 
@@ -208,7 +208,7 @@ module execute_stage (
 
     v.instr.op_b = v.instr.op;
 
-    if ((v.stall | csr_out.trap | csr_out.mret | clear[0]) == 1) begin
+    if ((v.stall | csr_out.trap | csr_out.mret | clear) == 1) begin
       v.instr.op = init_operation;
     end
 
@@ -250,14 +250,6 @@ module execute_stage (
       r <= init_execute_reg;
     end else begin
       r <= rin;
-    end
-  end
-
-  always_ff @(posedge clock) begin
-    if (reset == 0) begin
-      clear <= 2'b11;
-    end else begin
-      clear <= {1'b0, clear[1]};
     end
   end
 
